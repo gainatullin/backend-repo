@@ -8,4 +8,8 @@ export class ChannelService {
   constructor(
     @InjectRepository(Channel) private channelRepo: Repository<Channel>,
   ) {}
+
+  async create(dto) {
+    console.log('dto', dto);
+  }
 }

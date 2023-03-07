@@ -11,4 +11,7 @@ export class Channel {
 
   @ManyToOne(() => User, (user) => user.channels)
   owner: User;
+
+  @Column({ default: 0 })
+  subscribersCount: number;
 }
