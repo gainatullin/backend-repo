@@ -9,7 +9,10 @@ export class Channel {
   @Column({ length: 55 })
   name: string;
 
-  @ManyToOne(() => User, (user) => user.channels)
+  @ManyToOne(() => User, (user) => user.channels, {
+    onDelete: 'CASCADE',
+    cascade: true,
+  })
   owner: User;
 
   @Column({ default: 0 })
