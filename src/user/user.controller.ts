@@ -8,9 +8,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @Get('/get')
-  get() {
-    console.log('123');
+  @Post('/get')
+  get(@Body() dto) {
+    return this.userService.get(dto);
   }
 
   @ApiOperation({ summary: 'Registration' })
@@ -19,5 +19,10 @@ export class UserController {
   @Post('/create')
   signUp(@Body() dto: CreateUserDto) {
     return this.userService.create(dto);
+  }
+
+  @Post('/search')
+  search(@Body() dto) {
+    return this.userService.search();
   }
 }

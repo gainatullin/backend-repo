@@ -6,8 +6,8 @@ import { Channel } from '../channel/channel.entity';
 export class User {
   // @Factory((faker) => faker.name.fullName())
   @ApiProperty({ example: 0, description: 'Unique identifier' })
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   // @Factory((faker, fakectx) => faker.helpers.unique(faker.internet.domainName))
   @ApiProperty({ example: 'string', description: 'Username' })
@@ -19,7 +19,6 @@ export class User {
   @Column()
   email: string;
 
-  // @Factory((faker, ctx) => faker.internet.password())
   @Column({ select: false })
   passwordHash: string;
 
