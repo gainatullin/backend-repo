@@ -13,9 +13,21 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  async get(dto) {
+  async getById(dto) {
     const user = await this.userRepository.query(
       `select id, username, email from users where "users".id = '${dto.id}'`,
+    );
+
+    if (!user.length) {
+      throw new BadRequestException('No user');
+    }
+
+    return user[0];
+  }
+
+  async getByEmailWithPassword(dto) {
+    const user = await this.userRepository.query(
+      `select * from users where "users".email = '${dto.email}'`,
     );
 
     if (!user.length) {

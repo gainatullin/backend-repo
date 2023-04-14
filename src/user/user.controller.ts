@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { User } from './user.entity';
@@ -10,7 +10,7 @@ export class UserController {
 
   @Post('/get')
   get(@Body() dto) {
-    return this.userService.get(dto);
+    return this.userService.getById(dto);
   }
 
   @ApiOperation({ summary: 'Registration' })

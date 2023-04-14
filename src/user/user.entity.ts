@@ -2,7 +2,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Channel } from '../channel/channel.entity';
 
-@Entity('users')
+@Entity('user')
 export class User {
   // @Factory((faker) => faker.name.fullName())
   @ApiProperty({ example: 0, description: 'Unique identifier' })
