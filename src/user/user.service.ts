@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dto';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcryptjs');
 
@@ -14,20 +14,22 @@ export class UserService {
   ) {}
 
   async getById(dto) {
-    const user = await this.userRepository.query(
-      `select id, username, email from users where "users".id = '${dto.id}'`,
-    );
-
-    if (!user.length) {
-      throw new BadRequestException('No user');
-    }
-
-    return user[0];
+    // const user = await this.userRepository.query(
+    //   `select id, username, email from users where "users".id = '${dto.id}'`,
+    // );
+    //
+    // if (!user.length) {
+    //   throw new BadRequestException('No user');
+    // }
+    //
+    // return user[0];
   }
 
   async getByEmailWithPassword(dto) {
     const user = await this.userRepository.query(
-      `select * from users where "users".email = '${dto.email}'`,
+      `SELECT * FROM users JOIN credentials ON "credentials"."userId" = users.id
+            WHERE credentials.value = '${dto.credential}'
+            `,
     );
 
     if (!user.length) {
@@ -38,30 +40,19 @@ export class UserService {
   }
 
   async search() {
-    const users = await this.userRepository.query(
-      `select id, username, email from users`,
-    );
+    const users = await this.userRepository.query(`select * from user`);
     const usersCount = await this.userRepository.query(
-      `SELECT COUNT(*) FROM users;`,
+      `SELECT COUNT(*) FROM user;`,
     );
 
     return { list: users, count: usersCount[0].count };
   }
 
   async create(dto: CreateUserDto) {
-    const { email, passwordHash, username } = dto;
-    const user = await this.userRepository.query(
-      `select * from users where email = '${email}'`,
-    );
+    const hashPassword = await bcrypt.hash(dto.passwordHash, 12);
 
-    if (user.length) {
-      throw new BadRequestException('Already exists');
-    }
-
-    const hashPassword = await bcrypt.hash(passwordHash, 12);
-
-    await this.userRepository.query(
-      `insert into users ("username", "email", "passwordHash") values('${username}', '${email}', '${hashPassword}')`,
+    return await this.userRepository.query(
+      `insert into users ("passwordHash") values('${hashPassword}') RETURNING id`,
     );
   }
 }

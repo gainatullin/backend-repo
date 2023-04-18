@@ -3,8 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
-import { ChannelModule } from './channel/channel.module';
 import { AuthModule } from './auth/auth.module';
+import { CredentialModule } from './credential/credential.module';
 
 @Module({
   imports: [
@@ -14,14 +14,14 @@ import { AuthModule } from './auth/auth.module';
       port: 5432,
       username: 'm.gainatullin',
       password: '1234',
-      database: 'backend',
+      database: 'sql-backend',
       logging: true,
       entities: ['dist/**/*.entity.js'],
       synchronize: true,
     }),
     UserModule,
-    ChannelModule,
     AuthModule,
+    CredentialModule,
   ],
   controllers: [AppController],
   providers: [AppService],

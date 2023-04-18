@@ -11,7 +11,7 @@ seeder({
       port: 5432,
       username: 'm.gainatullin',
       password: '1234',
-      database: 'backend',
+      database: 'sql-backend',
       entities: ['dist/**/*.entity.js'],
       synchronize: true,
     }),
