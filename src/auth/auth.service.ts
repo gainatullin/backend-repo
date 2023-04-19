@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { SignInDto } from './dto';
 import { UserService } from '../user/user.service';
 import { CredentialService } from '../credential/credential.service';
+import { CustomErrorException } from '../errors/error.exception';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcryptjs');
 
@@ -29,6 +30,18 @@ export class AuthService {
     const user = await this.userService.getByEmailWithPassword({
       credential: dto.credential,
     });
+
+    if (!user.isConfirmed) {
+      throw new CustomErrorException({
+        code: 'USER_CREDENTIAL_IS_NOT_CONFIRMED',
+      });
+    }
+
+    if (user.isBlocked) {
+      throw new CustomErrorException({
+        code: 'USER_HAS_BEEN_BLOCKED',
+      });
+    }
 
     const isCompare = await bcrypt.compare(dto.passwordHash, user.passwordHash);
 

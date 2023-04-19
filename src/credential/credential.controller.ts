@@ -1,12 +1,15 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { CredentialService } from './credential.service';
+import { ApiTags } from '@nestjs/swagger';
+import { ConfirmCredentialDto } from './dto';
 
-@Controller('credential')
+@ApiTags('Credentials')
+@Controller('credentials')
 export class CredentialController {
   constructor(private credentialService: CredentialService) {}
 
-  @Post('/create')
-  create(@Body() dto) {
-    console.log('!');
+  @Post('/confirm')
+  confirm(@Body() dto: ConfirmCredentialDto) {
+    return this.credentialService.confirm(dto);
   }
 }

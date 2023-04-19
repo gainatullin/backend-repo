@@ -4,15 +4,14 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
   app.enableCors();
   app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
     .addTag('')
-    .setTitle(process.env.SWAGGER_NAME)
-    .setDescription(process.env.SWAGGER_DESCRIPTION)
-    .setVersion(process.env.SWAGGER_VERSION)
+    .setTitle('Swagger')
+    .setDescription('Descr')
+    .setVersion('0.1.0')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
@@ -24,5 +23,6 @@ async function bootstrap() {
       docExpansion: 'none',
     },
   });
+  await app.listen(3000);
 }
 bootstrap();

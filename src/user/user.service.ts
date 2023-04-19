@@ -14,21 +14,21 @@ export class UserService {
   ) {}
 
   async getById(dto) {
-    // const user = await this.userRepository.query(
-    //   `select id, username, email from users where "users".id = '${dto.id}'`,
-    // );
-    //
-    // if (!user.length) {
-    //   throw new BadRequestException('No user');
-    // }
-    //
-    // return user[0];
+    const user = await this.userRepository.query(
+      `select id, credential, "isBanned", "isConfirmed" from users JOIN credentials ON "credentials"."userId" = '${dto.id}' where "users".id = '${dto.id}'`,
+    );
+
+    if (!user.length) {
+      throw new BadRequestException('No user');
+    }
+
+    return user[0];
   }
 
   async getByEmailWithPassword(dto) {
     const user = await this.userRepository.query(
       `SELECT * FROM users JOIN credentials ON "credentials"."userId" = users.id
-            WHERE credentials.value = '${dto.credential}'
+            WHERE credentials.credential = '${dto.credential}'
             `,
     );
 
@@ -40,9 +40,9 @@ export class UserService {
   }
 
   async search() {
-    const users = await this.userRepository.query(`select * from user`);
+    const users = await this.userRepository.query(`select * from users`);
     const usersCount = await this.userRepository.query(
-      `SELECT COUNT(*) FROM user;`,
+      `SELECT COUNT(*) FROM users;`,
     );
 
     return { list: users, count: usersCount[0].count };

@@ -7,13 +7,16 @@ export class Credential {
   userId: string;
 
   @Column()
-  value: string;
+  credential: string;
 
   @Column({ default: false })
   isConfirmed: boolean;
 
   @Column({ default: false })
   isBanned: boolean;
+
+  @Column({ default: 'ABC123' })
+  confirmationCode: string;
 
   @OneToOne(() => User, (user) => user.credential)
   @JoinColumn({ name: 'userId' })
