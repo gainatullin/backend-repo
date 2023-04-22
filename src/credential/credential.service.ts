@@ -49,7 +49,7 @@ export class CredentialService {
 
   async create(dto) {
     await this.credentialRepo.query(
-      `insert into credentials ("value", "userId") values('${dto.credential}', '${dto.userId}')`,
+      `insert into credentials ("credential", "userId") values('${dto.credential}', '${dto.userId}')`,
     );
   }
 }

@@ -17,4 +17,14 @@ export class AuthController {
   signIn(@Body() dto: SignInDto) {
     return this.authService.signIn(dto);
   }
+
+  @Post('/recovery/request')
+  recoveryRequest(@Body() dto) {
+    console.log('1', dto);
+  }
+
+  @Post('/recovery/confirm')
+  recoveryConfirm(@Body() dto) {
+    console.log('1', dto);
+  }
 }

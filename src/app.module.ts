@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { CredentialModule } from './credential/credential.module';
+import { UserRoleModule } from './user-role/user-role.module';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { CredentialModule } from './credential/credential.module';
     UserModule,
     AuthModule,
     CredentialModule,
+    UserRoleModule,
+    PostModule,
   ],
   providers: [AppService],
 })

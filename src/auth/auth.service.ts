@@ -3,6 +3,9 @@ import { SignInDto } from './dto';
 import { UserService } from '../user/user.service';
 import { CredentialService } from '../credential/credential.service';
 import { CustomErrorException } from '../errors/error.exception';
+import { UserRoleService } from '../user-role/user-role.service';
+import { EUserRoles } from '../user-role/user-role.entity';
+import { JwtService } from '@nestjs/jwt';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcryptjs');
 
@@ -11,6 +14,8 @@ export class AuthService {
   constructor(
     private userService: UserService,
     private credentialService: CredentialService,
+    private userRoleService: UserRoleService,
+    private jwtService: JwtService,
   ) {}
 
   async signUp(dto) {
@@ -23,6 +28,10 @@ export class AuthService {
     }
 
     const user = await this.userService.create(dto);
+    await this.userRoleService.create({
+      userId: user[0].id,
+      role: EUserRoles.USER,
+    });
     await this.credentialService.create({ ...dto, userId: user[0].id });
   }
 
@@ -51,7 +60,7 @@ export class AuthService {
       });
     }
 
-    return { token: 'string_token' };
+    return { token: this.jwtService.sign({ user: user[0] }) };
   }
 
   async test() {

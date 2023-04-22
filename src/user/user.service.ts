@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto';
+import { UserRoleService } from '../user-role/user-role.service';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcryptjs');
 
@@ -11,16 +12,26 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private userRoleService: UserRoleService,
   ) {}
 
   async getById(dto) {
     const user = await this.userRepository.query(
-      `select id, credential, "isBanned", "isConfirmed" from users JOIN credentials ON "credentials"."userId" = '${dto.id}' where "users".id = '${dto.id}'`,
+      `
+          select 
+            id, credential, "isBanned", "isConfirmed"
+            from users u JOIN credentials с ON с."userId" = '${dto.id}' 
+            where u.id = '${dto.id}'
+          `,
     );
 
     if (!user.length) {
       throw new BadRequestException('No user');
     }
+
+    const roles = await this.userRoleService.getUserRoles(dto.id);
+
+    user[0].roles = roles.map((role) => role.role);
 
     return user[0];
   }
@@ -52,7 +63,7 @@ export class UserService {
     const hashPassword = await bcrypt.hash(dto.passwordHash, 12);
 
     return await this.userRepository.query(
-      `insert into users ("passwordHash") values('${hashPassword}') RETURNING id`,
+      `insert into users (username, "passwordHash") values('${dto.username}', '${hashPassword}') RETURNING id`,
     );
   }
 }

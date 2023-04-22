@@ -18,7 +18,10 @@ export class Credential {
   @Column({ default: 'ABC123' })
   confirmationCode: string;
 
-  @OneToOne(() => User, (user) => user.credential)
+  @OneToOne(() => User, (user) => user.credential, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'userId' })
   user: User;
 }
