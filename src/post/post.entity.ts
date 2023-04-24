@@ -6,14 +6,16 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../user/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { User } from '../user/user.entity';
 
 @Entity('posts')
 export class Post {
+  @ApiProperty({ example: 'string' })
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @ApiProperty({ example: 'string' })
   @Column()
   description: string;
 

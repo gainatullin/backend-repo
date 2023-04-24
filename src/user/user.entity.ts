@@ -21,12 +21,15 @@ export class User {
   @Column()
   passwordHash: string;
 
+  @ApiProperty({ example: 'string', description: 'Username' })
   @Column({ unique: true })
   username: string;
 
+  @ApiProperty({ example: 0, name: 'postsCount', description: 'Posts count' })
   @OneToMany(() => Post, (post) => post.owner)
   posts: Post[];
 
+  @ApiProperty({ example: ['string'], description: 'Roles' })
   @OneToMany(() => UserRole, (userRole) => userRole.user)
   roles: UserRole[];
 

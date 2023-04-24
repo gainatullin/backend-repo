@@ -1,13 +1,15 @@
 import { Body, Controller, HttpCode, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { GetUserDto } from './dto';
+import { User } from './user.entity';
 
 @ApiTags('Users')
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
 
+  @ApiResponse({ type: User })
   @Post('/get')
   @HttpCode(200)
   get(@Body() dto: GetUserDto) {

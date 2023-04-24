@@ -60,7 +60,9 @@ export class AuthService {
       });
     }
 
-    return { token: this.jwtService.sign({ user: user[0] }) };
+    console.log('user', user);
+
+    return { token: this.jwtService.sign({ user: user }) };
   }
 
   async test() {
