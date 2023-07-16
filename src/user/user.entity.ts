@@ -3,7 +3,6 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -33,7 +32,7 @@ export class User {
   @OneToMany(() => UserRole, (userRole) => userRole.user)
   roles: UserRole[];
 
-  @OneToOne(() => Credential, (credential) => credential.user)
+  @OneToMany(() => Credential, (credential) => credential.user)
   credential: Credential;
 
   @ApiProperty({ example: Date(), description: 'Created date' })

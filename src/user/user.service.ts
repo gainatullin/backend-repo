@@ -52,7 +52,10 @@ export class UserService {
   }
 
   async search() {
-    const users = await this.userRepository.query(`select * from users`);
+    const users = await this.userRepository.query(
+      `select u.*, json_agg(c.*) AS credentials, json_agg(r.role) AS roles
+        from users u left join credentials c ON u.id = c."userId" left join "user-role" r On u.id = r."userId" GROUP BY u.id`,
+    );
     const usersCount = await this.userRepository.query(
       `SELECT COUNT(*) FROM users;`,
     );

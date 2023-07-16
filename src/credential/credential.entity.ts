@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 import { User } from '../user/user.entity';
 
 @Entity('credentials')
@@ -18,10 +18,9 @@ export class Credential {
   @Column({ default: 'ABC123' })
   confirmationCode: string;
 
-  @OneToOne(() => User, (user) => user.credential, {
+  @ManyToOne(() => User, (user) => user.credential, {
     cascade: true,
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'userId' })
   user: User;
 }
