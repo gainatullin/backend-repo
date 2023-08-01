@@ -66,4 +66,9 @@ export class AuthService {
 
     return { token: this.jwtService.sign({ user: user }) };
   }
+
+  async getSelf(userId) {
+    return await this.userService.getById(userId);
+    console.log(userId);
+  }
 }
