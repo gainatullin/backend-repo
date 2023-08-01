@@ -17,7 +17,7 @@ import { PostModule } from './post/post.module';
       username: 'm.gainatullin',
       password: '1234',
       database: 'sql-backend',
-      logging: false,
+      logging: true,
       entities: ['dist/**/*.entity.js'],
       synchronize: true,
     }),

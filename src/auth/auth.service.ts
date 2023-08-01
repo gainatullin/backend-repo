@@ -27,7 +27,14 @@ export class AuthService {
       throw new BadRequestException('Already exists');
     }
 
+    const isUsedUsername = await this.userService.checkUsername(dto.username);
+
+    if (isUsedUsername.length) {
+      throw new BadRequestException('Username already exists');
+    }
+
     const user = await this.userService.create(dto);
+
     await this.userRoleService.create({
       userId: user[0].id,
       role: EUserRoles.USER,
@@ -50,7 +57,7 @@ export class AuthService {
       });
     }
 
-    if (user.isBlocked) {
+    if (user.isBanned) {
       throw new CustomErrorException({
         code: 'USER_HAS_BEEN_BLOCKED',
       });
@@ -69,6 +76,23 @@ export class AuthService {
 
   async getSelf(userId) {
     return await this.userService.getById(userId);
-    console.log(userId);
+  }
+
+  async recoveryRequest(dto) {
+    const user = await this.credentialService.getOneByCredential(
+      dto.credential,
+    );
+
+    if (!user) {
+      throw new CustomErrorException({
+        code: 'USER_NOT_FOUND',
+      });
+    }
+
+    if (user.isBanned) {
+      throw new CustomErrorException({
+        code: 'USER_HAS_BEEN_BLOCKED',
+      });
+    }
   }
 }

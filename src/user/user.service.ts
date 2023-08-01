@@ -70,4 +70,10 @@ export class UserService {
       `insert into users (username, "passwordHash") values('${dto.username}', '${hashPassword}') RETURNING id`,
     );
   }
+
+  async checkUsername(username) {
+    return await this.userRepository.query(
+      `select * from users where username = '${username}'`,
+    );
+  }
 }
