@@ -32,7 +32,11 @@ export class AuthService {
       userId: user[0].id,
       role: EUserRoles.USER,
     });
-    await this.credentialService.create({ ...dto, userId: user[0].id });
+
+    await this.credentialService.create({
+      credential: dto.credential,
+      userId: user[0].id,
+    });
   }
 
   async signIn(dto: SignInDto) {
@@ -60,13 +64,6 @@ export class AuthService {
       });
     }
 
-    console.log('user', user);
-
     return { token: this.jwtService.sign({ user: user }) };
-  }
-
-  async test() {
-    console.log('1');
-    return 1;
   }
 }
