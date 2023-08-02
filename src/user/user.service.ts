@@ -18,11 +18,7 @@ export class UserService {
   async getById(dto) {
     const user = await this.userRepository.query(
       `
-          SELECT 
-            id, credential, "isBanned", "isConfirmed",
-            (SELECT COUNT(p.id) FROM posts p WHERE p."ownerId" = '${dto.id}') AS "postsCount"
-            FROM users u JOIN credentials с ON с."userId" = '${dto.id}' 
-            WHERE u.id = '${dto.id}'
+           
           `,
     );
 
@@ -74,6 +70,12 @@ export class UserService {
   async checkUsername(username) {
     return await this.userRepository.query(
       `select * from users where username = '${username}'`,
+    );
+  }
+
+  async updatePassword(password, userId) {
+    await this.userRepository.query(
+      `UPDATE users SET "passwordHash" = '${password}' WHERE id = '${userId}';`,
     );
   }
 }

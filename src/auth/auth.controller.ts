@@ -61,6 +61,6 @@ export class AuthController {
   @HttpCode(200)
   @Post('/recovery/confirm')
   recoveryConfirm(@Body() dto) {
-    console.log('1', dto);
+    return this.authService.recoveryConfirm(dto);
   }
 }

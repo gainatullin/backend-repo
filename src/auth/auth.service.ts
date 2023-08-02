@@ -51,6 +51,8 @@ export class AuthService {
       credential: dto.credential,
     });
 
+    console.log('user', user);
+
     if (!user.isConfirmed) {
       throw new CustomErrorException({
         code: 'USER_CREDENTIAL_IS_NOT_CONFIRMED',
@@ -63,7 +65,10 @@ export class AuthService {
       });
     }
 
-    const isCompare = await bcrypt.compare(dto.passwordHash, user.passwordHash);
+    const isCompare = await bcrypt.compareSync(
+      dto.passwordHash,
+      user.passwordHash,
+    );
 
     if (!isCompare) {
       throw new BadRequestException({
@@ -96,5 +101,27 @@ export class AuthService {
     }
 
     await this.credentialService.recovery(dto);
+  }
+
+  async recoveryConfirm(dto) {
+    const user = await this.credentialService.getOneByCredential(
+      dto.credential,
+    );
+
+    if (!user) {
+      throw new CustomErrorException({
+        code: 'USER_NOT_FOUND',
+      });
+    }
+
+    if (dto.confirmationCode !== user[0].confirmationCode) {
+      throw new CustomErrorException({
+        code: 'INCORRECT_CONFIRMATION_CODE',
+      });
+    }
+
+    const hashPassword = await bcrypt.hash(dto.passwordHash, 12);
+
+    await this.userService.updatePassword(hashPassword, user[0].userId);
   }
 }
