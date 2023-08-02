@@ -94,5 +94,7 @@ export class AuthService {
         code: 'USER_HAS_BEEN_BLOCKED',
       });
     }
+
+    await this.credentialService.recovery(dto);
   }
 }

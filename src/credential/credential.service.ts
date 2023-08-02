@@ -52,4 +52,10 @@ export class CredentialService {
       `insert into credentials ("credential", "userId") values('${dto.credential}', '${dto.userId}')`,
     );
   }
+
+  async recovery(dto) {
+    await this.credentialRepo.query(
+      `UPDATE credentials SET "confirmationCode" = '321ABC' WHERE credential = '${dto.credential}';`,
+    );
+  }
 }

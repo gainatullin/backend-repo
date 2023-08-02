@@ -55,6 +55,10 @@ export class AuthController {
     return this.authService.recoveryRequest(dto);
   }
 
+  @UsePipes(new ValidationPipe())
+  @ApiOperation({ summary: 'Recovery confirm' })
+  @ApiResponse({ status: 200 })
+  @HttpCode(200)
   @Post('/recovery/confirm')
   recoveryConfirm(@Body() dto) {
     console.log('1', dto);
