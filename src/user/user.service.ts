@@ -18,7 +18,11 @@ export class UserService {
   async getById(dto) {
     const user = await this.userRepository.query(
       `
-           
+           SELECT 
+            id, credential, "isBanned", "isConfirmed",
+            (SELECT COUNT(p.id) FROM posts p WHERE p."ownerId" = '${dto.id}') AS "postsCount"
+            FROM users u JOIN credentials с ON с."userId" = '${dto.id}' 
+            WHERE u.id = '${dto.id}'
           `,
     );
 
