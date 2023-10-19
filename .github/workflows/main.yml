@@ -2,15 +2,14 @@ name: CI/CD
 
 on:
   push:
-    branches:
-      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+
+
 
       # Установка Node.js и зависимостей
       - name: Install Node.js
