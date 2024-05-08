@@ -6,21 +6,12 @@ import { AuthModule } from './auth/auth.module';
 import { CredentialModule } from './credential/credential.module';
 import { UserRoleModule } from './user-role/user-role.module';
 import { PostModule } from './post/post.module';
+import { AppDataSource } from './orm.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      logging: true,
-      entities: ['dist/**/*.entity.js'],
-      synchronize: false,
-    }),
+    TypeOrmModule.forRoot({ ...AppDataSource.options }),
     UserModule,
     AuthModule,
     CredentialModule,
