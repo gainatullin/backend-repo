@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, MinLength } from 'class-validator';
+import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 
 export class SignUpDto {
   @ApiProperty({
@@ -7,6 +7,7 @@ export class SignUpDto {
     description: 'User email or phone number',
   })
   @IsString({ message: 'Credential is required field' })
+  @IsNotEmpty({ message: 'Credential should not be empty' })
   readonly credential: string;
 
   @ApiProperty({ example: 'string', description: 'Username' })
