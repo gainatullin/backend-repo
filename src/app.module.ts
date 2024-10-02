@@ -11,7 +11,7 @@ import { AppDataSource } from './orm.config';
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
-    TypeOrmModule.forRoot({ ...AppDataSource.options }),
+    TypeOrmModule.forRoot({ ...AppDataSource.options, synchronize: false }),
     UserModule,
     AuthModule,
     CredentialModule,

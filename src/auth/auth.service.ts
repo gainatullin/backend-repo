@@ -1,13 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { SignInDto } from './dto';
+import { JwtService } from '@nestjs/jwt';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const bcrypt = require('bcryptjs');
 import { UserService } from '../user/user.service';
 import { CredentialService } from '../credential/credential.service';
 import { CustomErrorException } from '../errors/error.exception';
 import { UserRoleService } from '../user-role/user-role.service';
 import { EUserRoles } from '../user-role/user-role.entity';
-import { JwtService } from '@nestjs/jwt';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const bcrypt = require('bcryptjs');
+import { SignInDto } from './dto';
 
 @Injectable()
 export class AuthService {
@@ -50,8 +50,6 @@ export class AuthService {
     const user = await this.userService.getByEmailWithPassword({
       credential: dto.credential,
     });
-
-    console.log('user', user);
 
     if (!user.isConfirmed) {
       throw new CustomErrorException({
