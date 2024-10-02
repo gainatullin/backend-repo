@@ -6,7 +6,7 @@ import {
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import { PostService } from './post.service';
 import { AuthGuard } from '../auth/auth.guard';
 import { CreatePostDto, SearchPostsDto } from './dto';
@@ -18,6 +18,7 @@ import { ValidationPipe } from '../pipes/validation.pipe';
 export class PostController {
   constructor(private postService: PostService) {}
 
+  @ApiOperation({ summary: 'Posts create' })
   @UsePipes(new ValidationPipe())
   @UseGuards(AuthGuard)
   @Post('/create')
@@ -25,15 +26,10 @@ export class PostController {
     return this.postService.create({ ...dto, userId: req.user.id });
   }
 
+  @ApiOperation({ summary: 'Posts search' })
   @ApiResponse({ type: PostEntity })
   @Post('/search')
   search(@Body() dto: SearchPostsDto) {
     return this.postService.search(dto);
-  }
-
-  @UsePipes(new ValidationPipe())
-  @Post('/remove')
-  remove(@Body() dto) {
-    // return this.postService.remove(dto);
   }
 }
